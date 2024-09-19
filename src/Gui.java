@@ -11,7 +11,7 @@ public class Gui {
     public static void initialize() {
         JFrame jframe = new JFrame("Training Planner");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jframe.setSize(500, 500);
+        jframe.setSize(550, 550);
 
         // Create menubar with FILE and HELP menus
         JMenuBar menuBar = new JMenuBar();

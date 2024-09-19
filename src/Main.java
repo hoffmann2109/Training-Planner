@@ -3,6 +3,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         handleFile(1);
+        Gui.initialize();
 
     }
 

@@ -7,16 +7,35 @@ public class TrainingWeek {
     private List<Exercise> exercises = new ArrayList<>();
     private int week;
     private Map<MuscleGroup, Integer> setsPerWeek = new HashMap<>();
+    private Map<MuscleGroup, Integer> targetSetsPerWeek = new HashMap<>();
 
     public TrainingWeek(int week) {
         this.week = week;
+        setTargetSetsPerWeek();
+    }
+
+    public void setTargetSetsPerWeek() {
+        this.targetSetsPerWeek.put(MuscleGroup.CALVES, 8);
+        this.targetSetsPerWeek.put(MuscleGroup.HAMSTRINGS, 8);
+        this.targetSetsPerWeek.put(MuscleGroup.QUADS, 8);
+        this.targetSetsPerWeek.put(MuscleGroup.ABS, 0);
+        this.targetSetsPerWeek.put(MuscleGroup.CHEST, 10);
+        this.targetSetsPerWeek.put(MuscleGroup.BACK, 10);
+        this.targetSetsPerWeek.put(MuscleGroup.TRICEPS, 10);
+        this.targetSetsPerWeek.put(MuscleGroup.BICEPS, 10);
+        this.targetSetsPerWeek.put(MuscleGroup.FOREARMS, 0);
+        this.targetSetsPerWeek.put(MuscleGroup.REAR_DELTS, 10);
+        this.targetSetsPerWeek.put(MuscleGroup.SIDE_DELTS, 10);
+        this.targetSetsPerWeek.put(MuscleGroup.FRONT_DELTS, 0);
+        this.targetSetsPerWeek.put(MuscleGroup.TRAPS, 0);
     }
 
     public void getSetsPerWeek(){
         System.out.println("-----------------------------");
         System.out.println("Sets completed in Week "+ week + ": " + "\n") ;
         for (MuscleGroup muscle: setsPerWeek.keySet()) {
-            System.out.println(muscle + ": " + setsPerWeek.get(muscle) + " sets");
+            double percentage = (double) setsPerWeek.get(muscle) / targetSetsPerWeek.get(muscle) * 100.00;
+            System.out.println(muscle + ": " + setsPerWeek.get(muscle) + "/" + targetSetsPerWeek.get(muscle) + " sets --> " + (int) percentage + "%");
         }
         System.out.println("-----------------------------");
     }

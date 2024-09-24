@@ -14,6 +14,10 @@ public class TrainingWeek {
         setTargetSetsPerWeek();
     }
 
+    public List<Exercise> getExercises() {
+        return exercises;
+    }
+
     public void setTargetSetsPerWeek() {
         this.targetSetsPerWeek.put(MuscleGroup.CALVES, 8);
         this.targetSetsPerWeek.put(MuscleGroup.HAMSTRINGS, 8);

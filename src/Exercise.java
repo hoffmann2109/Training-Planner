@@ -11,6 +11,14 @@ public class Exercise {
         this.sets = sets;
     }
 
+    public MuscleGroup getMuscleGroup() {
+        return muscleGroup;
+    }
+
+    public List<Set> getSets() {
+        return sets;
+    }
+
     public String toString(){
         return "Exercise: " + name + " for " + muscleGroup + ": " + sets.size() + " sets";
     }

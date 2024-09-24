@@ -8,4 +8,16 @@ public class Set {
         this.reps = reps;
         this.rpe = rpe;
     }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public int getReps() {
+        return reps;
+    }
+
+    public double getRpe() {
+        return rpe;
+    }
 }

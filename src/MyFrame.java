@@ -9,6 +9,7 @@ import java.util.List;
 public class MyFrame extends JFrame implements ActionListener {
     private JButton button;
     private JTextArea textArea;
+    private JTextArea textArea2;
 
     public MyFrame() {
         this.setTitle("Training Planner");
@@ -24,7 +25,7 @@ public class MyFrame extends JFrame implements ActionListener {
         button.addActionListener(this); //register button as Action-Listener
         button.setAlignmentX(Component.CENTER_ALIGNMENT); // Center button
 
-        // Add a text area to display data
+        // Add a text area to display setsPerWeek
         textArea = new JTextArea(8, 15);
         textArea.setEditable(false); // User can't edit the text
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -32,6 +33,15 @@ public class MyFrame extends JFrame implements ActionListener {
         scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT); // Center text area
         scrollPane.setMaximumSize(new Dimension(400, 200));
         scrollPane.setPreferredSize(new Dimension(400, 200));
+
+        //Add a second text area to display Volume & RPE
+        textArea2 = new JTextArea(8, 15);
+        textArea2.setEditable(false);
+        JScrollPane scrollPane2 = new JScrollPane(textArea2);
+        this.add(scrollPane2);
+        scrollPane2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scrollPane2.setMaximumSize(new Dimension(400, 200));
+        scrollPane2.setPreferredSize(new Dimension(400, 200));
 
         // Show:
         this.setVisible(true);
@@ -55,8 +65,11 @@ public class MyFrame extends JFrame implements ActionListener {
         int weekCount = findWeek(file);
         TrainingWeek week = new TrainingWeek(weekCount);
         week.addExercises(array);
-        String analysisResults = Analysis.analyze(week).toString();
+        String analysisResults = Analysis.setsPerWeek(week).toString();
+        String analysisResults2 = Analysis.volumeRpe(week).toString();
+        WeekProgress.addWeek(week);
         textArea.setText(analysisResults);
+        textArea2.setText(analysisResults2);
     }
 
     public int findWeek(File file){

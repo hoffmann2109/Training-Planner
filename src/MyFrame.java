@@ -22,12 +22,16 @@ public class MyFrame extends JFrame implements ActionListener {
         this.add(button);
         button.setFocusable(false);
         button.addActionListener(this); //register button as Action-Listener
+        button.setAlignmentX(Component.CENTER_ALIGNMENT); // Center button
 
         // Add a text area to display data
-        textArea = new JTextArea(15, 30);
+        textArea = new JTextArea(8, 15);
         textArea.setEditable(false); // User can't edit the text
         JScrollPane scrollPane = new JScrollPane(textArea);
         this.add(scrollPane);
+        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT); // Center text area
+        scrollPane.setMaximumSize(new Dimension(400, 200));
+        scrollPane.setPreferredSize(new Dimension(400, 200));
 
         // Show:
         this.setVisible(true);
@@ -48,10 +52,22 @@ public class MyFrame extends JFrame implements ActionListener {
 
     public void handleFile(File file){
         List<List<String>> array = FileHandler.importData(file);
-        TrainingWeek week = new TrainingWeek(1);
+        int weekCount = findWeek(file);
+        TrainingWeek week = new TrainingWeek(weekCount);
         week.addExercises(array);
         String analysisResults = Analysis.analyze(week).toString();
         textArea.setText(analysisResults);
+    }
+
+    public int findWeek(File file){
+        String fileName = file.getName();
+        int week = 0;
+        for (int i = 0; i < fileName.length(); i++) {
+            if (fileName.charAt(i) >= '0' && fileName.charAt(i) <= '9') {
+                week = fileName.charAt(i) - '0';
+            }
+        }
+        return week;
     }
 
 }

@@ -33,7 +33,7 @@ public class TrainingWeek {
     public StringBuilder getSetsPerWeek(){
         StringBuilder sb = new StringBuilder();
         sb.append("Sets completed in Week " + week + ": " + "\n") ;
-
+        sb.append("\n");
         for (MuscleGroup muscle: setsPerWeek.keySet()) {
             double percentage = (double) setsPerWeek.get(muscle) / targetSetsPerWeek.get(muscle) * 100.00;
             sb.append(muscle + ": " + setsPerWeek.get(muscle) + "/" + targetSetsPerWeek.get(muscle) + " sets --> " + (int) percentage + "%" + "\n");

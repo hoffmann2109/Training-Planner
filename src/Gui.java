@@ -10,6 +10,5 @@ public class Gui {
 
     public static void initialize() {
         MyFrame frame = new MyFrame();
-
     }
 }

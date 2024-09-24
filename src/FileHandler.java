@@ -7,9 +7,7 @@ import java.util.List;
 
 public class FileHandler {
 
-    public static List<List<String>> importData(String filename){
-        String filePath = "/home/thomas/Downloads/" + filename;
-        File file = new File(filePath);
+    public static List<List<String>> importData(File file){
         List<List<String>> values = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -24,4 +22,5 @@ public class FileHandler {
         }
         return values;
     }
+
 }

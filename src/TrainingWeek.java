@@ -30,14 +30,15 @@ public class TrainingWeek {
         this.targetSetsPerWeek.put(MuscleGroup.TRAPS, 0);
     }
 
-    public void getSetsPerWeek(){
-        System.out.println("-----------------------------");
-        System.out.println("Sets completed in Week "+ week + ": " + "\n") ;
+    public StringBuilder getSetsPerWeek(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Sets completed in Week " + week + ": " + "\n") ;
+
         for (MuscleGroup muscle: setsPerWeek.keySet()) {
             double percentage = (double) setsPerWeek.get(muscle) / targetSetsPerWeek.get(muscle) * 100.00;
-            System.out.println(muscle + ": " + setsPerWeek.get(muscle) + "/" + targetSetsPerWeek.get(muscle) + " sets --> " + (int) percentage + "%");
+            sb.append(muscle + ": " + setsPerWeek.get(muscle) + "/" + targetSetsPerWeek.get(muscle) + " sets --> " + (int) percentage + "%" + "\n");
         }
-        System.out.println("-----------------------------");
+        return sb;
     }
 
     public void addExercises(List<List<String>> array) {
@@ -78,13 +79,4 @@ public class TrainingWeek {
 
         }
     }
-
-    public void printExercises() {
-        for (Exercise exercise : exercises) {
-            System.out.println(exercise);
-        }
-    }
-
-
-
 }

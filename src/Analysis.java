@@ -1,7 +1,6 @@
 public class Analysis {
 
-    public static void analyze(TrainingWeek week){
-        week.getSetsPerWeek();
-
+    public static StringBuilder analyze(TrainingWeek week){
+        return week.getSetsPerWeek();
     }
 }

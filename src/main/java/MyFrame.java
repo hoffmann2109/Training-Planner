@@ -10,12 +10,13 @@ public class MyFrame extends JFrame implements ActionListener {
     private JButton button;
     private JTextArea textArea;
     private JTextArea textArea2;
+    private JProgressBar progressBar;
 
     public MyFrame() {
         this.setTitle("Training Planner");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null); //Center the GUI on the screen
-        this.setSize(400, 400);
+        this.setSize(500, 500);
         this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS)); //Layout-Manager
 
         // Display a button:
@@ -45,6 +46,11 @@ public class MyFrame extends JFrame implements ActionListener {
         scrollPane2.setMaximumSize(new Dimension(400, 200));
         scrollPane2.setPreferredSize(new Dimension(400, 200));
 
+        // Add a progress bar:
+        progressBar = new JProgressBar();
+        this.add(progressBar);
+        progressBar.setStringPainted(true);
+
         // Show:
         this.setVisible(true);
     }
@@ -72,6 +78,7 @@ public class MyFrame extends JFrame implements ActionListener {
         WeekProgress.addWeek(week);
         textArea.setText(analysisResults);
         textArea2.setText(analysisResults2);
+        progressBar.setValue(week.getAveragePercentage());
     }
 
     public int findWeek(File file){

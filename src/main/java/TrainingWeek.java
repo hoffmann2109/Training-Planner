@@ -8,6 +8,8 @@ public class TrainingWeek {
     private int week;
     private Map<MuscleGroup, Integer> setsPerWeek = new HashMap<>();
     private Map<MuscleGroup, Integer> targetSetsPerWeek = new HashMap<>();
+    int totalPercentage = 0;
+    int percentageCount = 0;
 
     public TrainingWeek(int week) {
         this.week = week;
@@ -40,9 +42,15 @@ public class TrainingWeek {
         sb.append("\n");
         for (MuscleGroup muscle : setsPerWeek.keySet()) {
             double percentage = (double) setsPerWeek.get(muscle) / targetSetsPerWeek.get(muscle) * 100.00;
+            percentageCount++;
+            totalPercentage += percentage;
             sb.append(muscle + ": " + setsPerWeek.get(muscle) + "/" + targetSetsPerWeek.get(muscle) + " sets --> " + (int) percentage + "%" + "\n");
         }
         return sb;
+    }
+
+    public int getAveragePercentage() {
+        return totalPercentage / percentageCount;
     }
 
     public void addExercises(List<List<String>> array) {

@@ -28,6 +28,7 @@ public class MyFrame extends JFrame implements ActionListener {
         // Add a text area to display setsPerWeek
         textArea = new JTextArea(8, 15);
         textArea.setEditable(false); // User can't edit the text
+        textArea.setFocusable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
         this.add(scrollPane);
         scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT); // Center text area
@@ -37,6 +38,7 @@ public class MyFrame extends JFrame implements ActionListener {
         //Add a second text area to display Volume & RPE
         textArea2 = new JTextArea(8, 15);
         textArea2.setEditable(false);
+        textArea2.setFocusable(false);
         JScrollPane scrollPane2 = new JScrollPane(textArea2);
         this.add(scrollPane2);
         scrollPane2.setAlignmentX(Component.CENTER_ALIGNMENT);

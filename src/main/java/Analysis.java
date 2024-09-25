@@ -38,7 +38,7 @@ public class Analysis {
             MuscleGroup muscle = entry.getKey();
             AccumulatedData data = entry.getValue();
             double averageRpe = Math.round((data.sumRpe / data.rpeCount) * 10.0) / 10.0;
-            result.append(muscle + ": " + data.totalVolume + "@" + averageRpe + "\n");
+            result.append(muscle + ": " + data.totalVolume + " @" + averageRpe + "\n");
         }
 
         return result;

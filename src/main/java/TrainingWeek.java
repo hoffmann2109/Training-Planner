@@ -34,11 +34,11 @@ public class TrainingWeek {
         this.targetSetsPerWeek.put(MuscleGroup.TRAPS, 0);
     }
 
-    public StringBuilder getSetsPerWeek(){
+    public StringBuilder getSetsPerWeek() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Sets completed in Week " + week + ": " + "\n") ;
+        sb.append("Sets completed in Week " + week + ": " + "\n");
         sb.append("\n");
-        for (MuscleGroup muscle: setsPerWeek.keySet()) {
+        for (MuscleGroup muscle : setsPerWeek.keySet()) {
             double percentage = (double) setsPerWeek.get(muscle) / targetSetsPerWeek.get(muscle) * 100.00;
             sb.append(muscle + ": " + setsPerWeek.get(muscle) + "/" + targetSetsPerWeek.get(muscle) + " sets --> " + (int) percentage + "%" + "\n");
         }
@@ -47,7 +47,7 @@ public class TrainingWeek {
 
     public void addExercises(List<List<String>> array) {
         int length = array.size();
-        for (int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
 
             List<String> innerList = array.get(i);
             if (innerList.size() < 6) {
@@ -60,24 +60,29 @@ public class TrainingWeek {
             muscleGroupString = muscleGroupString.replace(' ', '_');
             MuscleGroup muscleGroup = MuscleGroup.valueOf(muscleGroupString);
             int setCount = Integer.parseInt(array.get(i).get(2).trim());
-            double weight = Double.parseDouble(array.get(i).get(3).trim());
-            List<Set> sets = new ArrayList<>();
+            if (setCount > 0) {
 
-            for (int j = 0; j < setCount; j++){
-                // reps:
-                String sReps = array.get(i).get(4).trim();
-                String[] repArray = sReps.split(",");
-                int reps = Integer.parseInt(repArray[j].trim());
 
-                //rpe:
-                String sRpe = array.get(i).get(5).trim();
-                String[] rpeArray = sRpe.split(",");
-                double rpes = Double.parseDouble(rpeArray[j].trim());
+                double weight = Double.parseDouble(array.get(i).get(3).trim());
+                List<Set> sets = new ArrayList<>();
 
-                // add to sets:
-                sets.add(new Set(weight, reps, rpes));
+                for (int j = 0; j < setCount; j++) {
+                    // reps:
+                    String sReps = array.get(i).get(4).trim();
+                    String[] repArray = sReps.split(",");
+                    int reps = Integer.parseInt(repArray[j].trim());
+
+                    //rpe:
+                    String sRpe = array.get(i).get(5).trim();
+                    String[] rpeArray = sRpe.split(",");
+                    double rpes = Double.parseDouble(rpeArray[j].trim());
+
+                    // add to sets:
+                    sets.add(new Set(weight, reps, rpes));
+                }
+
+                this.exercises.add(new Exercise(name, muscleGroup, sets));
             }
-            this.exercises.add(new Exercise(name, muscleGroup, sets));
             // Accumulate set counts per muscle group
             this.setsPerWeek.merge(muscleGroup, setCount, Integer::sum);
 

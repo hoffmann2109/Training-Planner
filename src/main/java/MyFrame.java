@@ -1,15 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.File;
 import java.util.List;
 
-public class MyFrame extends JFrame implements ActionListener {
+public class MyFrame extends JFrame {
     private JButton button;
     private JTextArea textArea;
     private JTextArea textArea2;
     private JProgressBar progressBar;
+    private JComboBox<MuscleGroup> comboBox;
 
     public MyFrame() {
         // Create the Main frame
@@ -19,7 +19,7 @@ public class MyFrame extends JFrame implements ActionListener {
         this.setSize(600, 400);
         this.setLayout(new BorderLayout(10, 10)); // Add gaps for better spacing
 
-        // Create two panels: one for controls, another for text display
+        // Create two panels: one for the data, one for charts
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
@@ -40,7 +40,6 @@ public class MyFrame extends JFrame implements ActionListener {
         button = new JButton("Upload CSV");
         button.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the button
         button.setFocusable(false);
-        button.addActionListener(this); // Register button as Action-Listener
         leftPanel.add(button);
         leftPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space between components
 
@@ -54,6 +53,8 @@ public class MyFrame extends JFrame implements ActionListener {
         textArea = new JTextArea(10, 30);
         textArea.setEditable(false); // User can't edit the text
         textArea.setFocusable(false);
+
+        // Scrollable view of the textArea:
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the text area
         scrollPane.setPreferredSize(new Dimension(400, 150)); // Set preferred size
@@ -63,25 +64,42 @@ public class MyFrame extends JFrame implements ActionListener {
         textArea2 = new JTextArea(10, 30);
         textArea2.setEditable(false);
         textArea2.setFocusable(false);
+
+        // Scrollable view of the textArea:
         JScrollPane scrollPane2 = new JScrollPane(textArea2);
         scrollPane2.setPreferredSize(new Dimension(400, 150)); // Set preferred size
         scrollPane2.setAlignmentX(Component.CENTER_ALIGNMENT);
         rightPanel.add(scrollPane2);
 
+        // Create a JComboBox and populate it with the enum values
+        comboBox = new JComboBox<>(MuscleGroup.values());
+        rightPanel.add(comboBox); // Add the JComboBox to the frame
+
         // Show the frame
         this.setVisible(true);
-    }
 
-    @Override
-    public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource() == button) { // If button is clicked
-            JFileChooser chooser = new JFileChooser();
-            int response = chooser.showOpenDialog(null); // Show the open file dialog
-            if (response == JFileChooser.APPROVE_OPTION) { // If a file was selected
-                File file = chooser.getSelectedFile();
-                handleFile(file); // Process the file
+        // Add ActionListener to the button using an anonymous inner class
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JFileChooser chooser = new JFileChooser();
+                int response = chooser.showOpenDialog(null); // Show the open file dialog
+                if (response == JFileChooser.APPROVE_OPTION) { // If a file was selected
+                    File file = chooser.getSelectedFile();
+                    handleFile(file); // Process the file
+                }
             }
-        }
+        });
+
+        // Add ActionListener to the JComboBox to display the selected item
+        comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                MuscleGroup selectedMuscleGroup = (MuscleGroup) comboBox.getSelectedItem();
+                // Display the selected item in textArea2 or use as needed
+                textArea2.setText("Selected Muscle Group: " + selectedMuscleGroup);
+            }
+        });
     }
 
     public void handleFile(File file) {
@@ -96,7 +114,6 @@ public class MyFrame extends JFrame implements ActionListener {
 
         WeekProgress.addWeek(week);
         textArea.setText(analysisResults + "\n" + "------------------------------------------------------------------" + "\n" + analysisResults2);  // Update first text area
-        //textArea2.setText(analysisResults2); // Update second text area
         progressBar.setValue(week.getAveragePercentage()); // Update progress bar
     }
 

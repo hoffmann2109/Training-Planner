@@ -85,6 +85,9 @@ public class MyFrame extends JFrame {
         // Create a JComboBox and populate it with the enum values
         comboBox = new JComboBox<>(MuscleGroup.values());
         comboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        DefaultListCellRenderer listRenderer = new DefaultListCellRenderer();
+        listRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        comboBox.setRenderer(listRenderer);
         rightPanel.add(comboBox); // Add the JComboBox to the frame
         rightPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space between components
 
@@ -120,8 +123,7 @@ public class MyFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 MuscleGroup selectedMuscleGroup = (MuscleGroup) comboBox.getSelectedItem();
-                // Display the selected item in textArea2 or use as needed
-                textArea2.setText("Selected Muscle Group: " + selectedMuscleGroup);
+
             }
         });
     }

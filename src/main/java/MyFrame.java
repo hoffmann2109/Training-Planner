@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.sql.SQLOutput;
 import java.util.List;
 
 public class MyFrame extends JFrame implements ActionListener {
@@ -13,83 +12,107 @@ public class MyFrame extends JFrame implements ActionListener {
     private JProgressBar progressBar;
 
     public MyFrame() {
+        // Create the Main frame
         this.setTitle("Training Planner");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null); //Center the GUI on the screen
-        this.setSize(500, 500);
-        this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS)); //Layout-Manager
+        this.setLocationRelativeTo(null); // Center the GUI on the screen
+        this.setSize(600, 400);
+        this.setLayout(new BorderLayout(10, 10)); // Add gaps for better spacing
 
-        // Display a button:
+        // Create two panels: one for controls, another for text display
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+
+        // Set background colors for visual distinction
+        leftPanel.setBackground(Color.LIGHT_GRAY);
+        rightPanel.setBackground(Color.WHITE);
+
+        // Add the panels to the main frame
+        this.add(leftPanel, BorderLayout.WEST);
+        this.add(rightPanel, BorderLayout.CENTER);
+
+        // Display an "Upload CSV" button
         button = new JButton("Upload CSV");
-        this.add(button);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the button
         button.setFocusable(false);
-        button.addActionListener(this); //register button as Action-Listener
-        button.setAlignmentX(Component.CENTER_ALIGNMENT); // Center button
+        button.addActionListener(this); // Register button as Action-Listener
+        leftPanel.add(button);
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space between components
 
-        // Add a text area to display setsPerWeek
-        textArea = new JTextArea(8, 15);
+        // Add a progress bar at the bottom of the left panel
+        progressBar = new JProgressBar();
+        progressBar.setStringPainted(true); // Show progress percentage
+        leftPanel.add(progressBar);
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space
+
+        // Add text areas for displaying the analysis results
+        textArea = new JTextArea(10, 30);
         textArea.setEditable(false); // User can't edit the text
         textArea.setFocusable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
-        this.add(scrollPane);
-        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT); // Center text area
-        scrollPane.setMaximumSize(new Dimension(400, 200));
-        scrollPane.setPreferredSize(new Dimension(400, 200));
+        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the text area
+        scrollPane.setPreferredSize(new Dimension(400, 150)); // Set preferred size
+        rightPanel.add(scrollPane);
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space between components
 
-        //Add a second text area to display Volume & RPE
-        textArea2 = new JTextArea(8, 15);
+        textArea2 = new JTextArea(10, 30);
         textArea2.setEditable(false);
         textArea2.setFocusable(false);
         JScrollPane scrollPane2 = new JScrollPane(textArea2);
-        this.add(scrollPane2);
+        scrollPane2.setPreferredSize(new Dimension(400, 150)); // Set preferred size
         scrollPane2.setAlignmentX(Component.CENTER_ALIGNMENT);
-        scrollPane2.setMaximumSize(new Dimension(400, 200));
-        scrollPane2.setPreferredSize(new Dimension(400, 200));
+        rightPanel.add(scrollPane2);
 
-        // Add a progress bar:
-        progressBar = new JProgressBar();
-        this.add(progressBar);
-        progressBar.setStringPainted(true);
-
-        // Show:
+        // Show the frame
         this.setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource() == button) { //If button is clicked
+        if (evt.getSource() == button) { // If button is clicked
             JFileChooser chooser = new JFileChooser();
-            int response = chooser.showSaveDialog(null);
-
-            if (response == JFileChooser.APPROVE_OPTION) { //If successfully chose file
-                File file2 = new File (chooser.getSelectedFile().getAbsolutePath());
-                handleFile(file2);
+            int response = chooser.showOpenDialog(null); // Show the open file dialog
+            if (response == JFileChooser.APPROVE_OPTION) { // If a file was selected
+                File file = chooser.getSelectedFile();
+                handleFile(file); // Process the file
             }
         }
     }
 
-    public void handleFile(File file){
-        List<List<String>> array = FileHandler.importData(file);
+    public void handleFile(File file) {
+        // Example of handling file and populating text areas and progress bar
+        List<List<String>> array = FileHandler.importData(file); // Assuming FileHandler works correctly
         int weekCount = findWeek(file);
         TrainingWeek week = new TrainingWeek(weekCount);
         week.addExercises(array);
+
         String analysisResults = Analysis.setsPerWeek(week).toString();
         String analysisResults2 = Analysis.volumeRpe(week).toString();
+
         WeekProgress.addWeek(week);
-        textArea.setText(analysisResults);
-        textArea2.setText(analysisResults2);
-        progressBar.setValue(week.getAveragePercentage());
+        textArea.setText(analysisResults + "\n" + "------------------------------------------------------------------" + "\n" + analysisResults2);  // Update first text area
+        //textArea2.setText(analysisResults2); // Update second text area
+        progressBar.setValue(week.getAveragePercentage()); // Update progress bar
     }
 
-    public int findWeek(File file){
+    public int findWeek(File file) {
         String fileName = file.getName();
         int week = 0;
         for (int i = 0; i < fileName.length(); i++) {
-            if (fileName.charAt(i) >= '0' && fileName.charAt(i) <= '9') {
+            if (Character.isDigit(fileName.charAt(i))) {
                 week = fileName.charAt(i) - '0';
             }
         }
         return week;
     }
 
+    public static void main(String[] args) {
+        // Run the GUI
+        new MyFrame();
+    }
 }

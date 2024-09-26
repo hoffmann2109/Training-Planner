@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Progress {
+public class Progress implements Serializable {
     private static List<TrainingWeek> trainingWeeks = new ArrayList<TrainingWeek>();
 
     public static void addWeeks(TrainingWeek trainingWeek) {

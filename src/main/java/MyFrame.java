@@ -8,11 +8,12 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
+import com.formdev.flatlaf.*;
 
 public class MyFrame extends JFrame {
     private JButton button;
-    private JTextArea textArea;
-    private JTextArea textArea2;
+    private JTextArea upperTextArea;
+    private JTextArea lowerTextArea;
     private JProgressBar progressBar;
     private JComboBox<MuscleGroup> comboBox;
     private ChartPanel chartPanel; // Added for the chart
@@ -26,47 +27,38 @@ public class MyFrame extends JFrame {
         this.setSize(800, 600); // Increased size to accommodate the chart
         this.setLayout(new BorderLayout(10, 10)); // Add gaps for better spacing
 
-        // Create two panels: one for the data, one for charts
-        JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+        // Create top panel for the button and progress bar
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
 
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
-
-        // Set background colors for visual distinction
-        leftPanel.setBackground(Color.LIGHT_GRAY);
-        rightPanel.setBackground(Color.WHITE);
-
-        // Add the panels to the main frame
-        this.add(leftPanel, BorderLayout.WEST);
-        this.add(rightPanel, BorderLayout.CENTER);
-
-        // Display an "Upload CSV" button
+        // Create the "Upload CSV" button
         button = new JButton("Upload CSV");
-        button.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the button
         button.setFocusable(false);
-        leftPanel.add(button);
-        leftPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space between components
+        topPanel.add(button);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0))); // Add space between button and progress bar
 
-        // Add a progress bar at the bottom of the left panel
+        // Add progress bar
         progressBar = new JProgressBar();
         progressBar.setStringPainted(true); // Show progress percentage
-        leftPanel.add(progressBar);
-        leftPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space
+        topPanel.add(progressBar);
+
+        // Add topPanel to the main frame
+        this.add(topPanel, BorderLayout.NORTH);
+
+        // Create center panel for the rest of the components
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
 
         // Add text area for displaying analysis results
-        textArea = new JTextArea(10, 30);
-        textArea.setEditable(false); // User can't edit the text
-        textArea.setFocusable(false);
-
-        // Scrollable view of the textArea:
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the text area
+        upperTextArea = new JTextArea(10, 30);
+        upperTextArea.setEditable(false); // User can't edit the text
+        upperTextArea.setFocusable(false);
+        JScrollPane scrollPane = new JScrollPane(upperTextArea);
         scrollPane.setPreferredSize(new Dimension(400, 150)); // Set preferred size
-        rightPanel.add(scrollPane);
-        rightPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space between components
+        centerPanel.add(scrollPane);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add space between components
 
         // Initialize the chart with empty data
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -78,34 +70,32 @@ public class MyFrame extends JFrame {
         );
         chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new Dimension(400, 300));
-        chartPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        rightPanel.add(chartPanel);
-        rightPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space between components
+        centerPanel.add(chartPanel);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add space between components
 
         // Create a JComboBox and populate it with the enum values
         comboBox = new JComboBox<>(MuscleGroup.values());
-        comboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
         DefaultListCellRenderer listRenderer = new DefaultListCellRenderer();
         listRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         comboBox.setRenderer(listRenderer);
-        rightPanel.add(comboBox); // Add the JComboBox to the frame
-        rightPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space between components
+        centerPanel.add(comboBox); // Add the JComboBox to the center panel
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add space between components
 
         // Add a second text area after the combo box
-        textArea2 = new JTextArea(10, 30);
-        textArea2.setEditable(false);
-        textArea2.setFocusable(false);
-
-        // Scrollable view of the textArea2:
-        JScrollPane scrollPane2 = new JScrollPane(textArea2);
+        lowerTextArea = new JTextArea(10, 30);
+        lowerTextArea.setEditable(false);
+        lowerTextArea.setFocusable(false);
+        JScrollPane scrollPane2 = new JScrollPane(lowerTextArea);
         scrollPane2.setPreferredSize(new Dimension(400, 150)); // Set preferred size
-        scrollPane2.setAlignmentX(Component.CENTER_ALIGNMENT);
-        rightPanel.add(scrollPane2);
+        centerPanel.add(scrollPane2);
+
+        // Add centerPanel to the main frame
+        this.add(centerPanel, BorderLayout.CENTER);
 
         // Show the frame
         this.setVisible(true);
 
-        // Add ActionListener to the button using an anonymous inner class
+        // Add ActionListener to the button
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -123,7 +113,7 @@ public class MyFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 MuscleGroup selectedMuscleGroup = (MuscleGroup) comboBox.getSelectedItem();
-
+                // Handle the selected muscle group
             }
         });
     }
@@ -139,11 +129,14 @@ public class MyFrame extends JFrame {
         String analysisResults2 = Analysis.volumeRpe(week).toString();
 
         WeekProgress.addWeek(week);
-        textArea.setText(analysisResults + "\n" + "------------------------------------------------------------------" + "\n" + analysisResults2);  // Update first text area
+        WeekProgress.serializeWeek(); //Serialize Training weeks
+        upperTextArea.setText(analysisResults);  // Update first text area
+        lowerTextArea.setText(analysisResults2);
         progressBar.setValue(week.getAveragePercentage()); // Update progress bar
 
         // Update the chart with the new data
         updateChart();
+
     }
 
     public void updateChart() {
@@ -187,6 +180,7 @@ public class MyFrame extends JFrame {
     }
 
     public static void main(String[] args) {
+        FlatLightLaf.install();
         // Run the GUI
         new MyFrame();
     }

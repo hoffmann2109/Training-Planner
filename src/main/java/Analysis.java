@@ -5,10 +5,12 @@ import java.util.Map;
 
 public class Analysis {
 
+    // Get sets per week:
     public static StringBuilder setsPerWeek(TrainingWeek week){
         return week.getSetsPerWeekString();
     }
 
+    // Get total volume load and average RPE per muscle-group per Week
     public static StringBuilder volumeRpe(TrainingWeek week) {
         ArrayList<Exercise> exercises = (ArrayList) week.getExercises();
         StringBuilder result = new StringBuilder();
@@ -40,12 +42,11 @@ public class Analysis {
             double averageRpe = Math.round((data.sumRpe / data.rpeCount) * 10.0) / 10.0;
             result.append(muscle + ": " + data.totalVolume + " @" + averageRpe + "\n");
         }
-
         return result;
     }
 
     // Helper class to accumulate data
-    static class AccumulatedData {
+    private static class AccumulatedData {
         double totalVolume = 0;
         double sumRpe = 0;
         int rpeCount = 0;

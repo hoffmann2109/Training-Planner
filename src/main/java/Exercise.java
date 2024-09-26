@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.List;
 
-public class Exercise {
+public class Exercise implements Serializable {
     private String name;
     private MuscleGroup muscleGroup;
     private List<Set> sets;

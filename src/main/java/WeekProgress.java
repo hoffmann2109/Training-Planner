@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class WeekProgress {
@@ -5,5 +6,9 @@ public class WeekProgress {
 
     public static void addWeek(TrainingWeek week) {
         weeks.add(week);
+    }
+
+    public static void serializeWeek(){
+        FileHandler.serializeObject(weeks);
     }
 }

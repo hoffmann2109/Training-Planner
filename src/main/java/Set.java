@@ -1,4 +1,6 @@
-public class Set {
+import java.io.Serializable;
+
+public class Set implements Serializable {
     private double weight;
     private int reps;
     private double rpe;

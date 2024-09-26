@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +18,21 @@ public class FileHandler {
             e.printStackTrace();
         }
         return values;
+    }
+
+    public static void serializeObject(ArrayList<TrainingWeek> weeks){
+        FileOutputStream fos = null;
+        ObjectOutputStream oos = null;
+        try {
+            fos = new FileOutputStream("training_week.ser");
+            oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(weeks);
+            fos.flush();
+            oos.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

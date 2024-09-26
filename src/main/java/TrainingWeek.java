@@ -1,9 +1,10 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TrainingWeek {
+public class TrainingWeek implements Serializable {
     private List<Exercise> exercises = new ArrayList<>();
     private int week;
     private Map<MuscleGroup, Integer> setsPerWeek = new HashMap<>();

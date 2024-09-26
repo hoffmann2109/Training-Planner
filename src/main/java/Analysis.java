@@ -6,7 +6,7 @@ import java.util.Map;
 public class Analysis {
 
     public static StringBuilder setsPerWeek(TrainingWeek week){
-        return week.getSetsPerWeek();
+        return week.getSetsPerWeekString();
     }
 
     public static StringBuilder volumeRpe(TrainingWeek week) {

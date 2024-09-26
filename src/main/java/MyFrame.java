@@ -3,6 +3,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class MyFrame extends JFrame {
     private JButton button;
@@ -10,13 +15,15 @@ public class MyFrame extends JFrame {
     private JTextArea textArea2;
     private JProgressBar progressBar;
     private JComboBox<MuscleGroup> comboBox;
+    private ChartPanel chartPanel; // Added for the chart
+    private TrainingWeek week; // Store the TrainingWeek instance
 
     public MyFrame() {
         // Create the Main frame
         this.setTitle("Training Planner");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null); // Center the GUI on the screen
-        this.setSize(600, 400);
+        this.setSize(800, 600); // Increased size to accommodate the chart
         this.setLayout(new BorderLayout(10, 10)); // Add gaps for better spacing
 
         // Create two panels: one for the data, one for charts
@@ -49,7 +56,7 @@ public class MyFrame extends JFrame {
         leftPanel.add(progressBar);
         leftPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space
 
-        // Add text areas for displaying the analysis results
+        // Add text area for displaying analysis results
         textArea = new JTextArea(10, 30);
         textArea.setEditable(false); // User can't edit the text
         textArea.setFocusable(false);
@@ -61,19 +68,36 @@ public class MyFrame extends JFrame {
         rightPanel.add(scrollPane);
         rightPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space between components
 
+        // Initialize the chart with empty data
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Sets per Muscle Group", // Chart Title
+                "Muscle Group", // Category axis (X)
+                "Sets", // Value axis (Y)
+                dataset
+        );
+        chartPanel = new ChartPanel(chart);
+        chartPanel.setPreferredSize(new Dimension(400, 300));
+        chartPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        rightPanel.add(chartPanel);
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space between components
+
+        // Create a JComboBox and populate it with the enum values
+        comboBox = new JComboBox<>(MuscleGroup.values());
+        comboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        rightPanel.add(comboBox); // Add the JComboBox to the frame
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add space between components
+
+        // Add a second text area after the combo box
         textArea2 = new JTextArea(10, 30);
         textArea2.setEditable(false);
         textArea2.setFocusable(false);
 
-        // Scrollable view of the textArea:
+        // Scrollable view of the textArea2:
         JScrollPane scrollPane2 = new JScrollPane(textArea2);
         scrollPane2.setPreferredSize(new Dimension(400, 150)); // Set preferred size
         scrollPane2.setAlignmentX(Component.CENTER_ALIGNMENT);
         rightPanel.add(scrollPane2);
-
-        // Create a JComboBox and populate it with the enum values
-        comboBox = new JComboBox<>(MuscleGroup.values());
-        rightPanel.add(comboBox); // Add the JComboBox to the frame
 
         // Show the frame
         this.setVisible(true);
@@ -106,7 +130,7 @@ public class MyFrame extends JFrame {
         // Example of handling file and populating text areas and progress bar
         List<List<String>> array = FileHandler.importData(file); // Assuming FileHandler works correctly
         int weekCount = findWeek(file);
-        TrainingWeek week = new TrainingWeek(weekCount);
+        week = new TrainingWeek(weekCount); // Store the week instance in the class variable
         week.addExercises(array);
 
         String analysisResults = Analysis.setsPerWeek(week).toString();
@@ -115,6 +139,38 @@ public class MyFrame extends JFrame {
         WeekProgress.addWeek(week);
         textArea.setText(analysisResults + "\n" + "------------------------------------------------------------------" + "\n" + analysisResults2);  // Update first text area
         progressBar.setValue(week.getAveragePercentage()); // Update progress bar
+
+        // Update the chart with the new data
+        updateChart();
+    }
+
+    public void updateChart() {
+        // Create a dataset from the TrainingWeek data
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        // Get data from the TrainingWeek instance
+        Map<MuscleGroup, Integer> setsPerWeek = week.getSetsPerWeekMap();
+        Map<MuscleGroup, Integer> targetSetsPerWeek = week.getTargetSetsPerWeek();
+
+        for (MuscleGroup muscle : setsPerWeek.keySet()) {
+            int setsCompleted = setsPerWeek.get(muscle);
+            int targetSets = targetSetsPerWeek.get(muscle);
+
+            // Add data to the dataset
+            dataset.addValue(setsCompleted, "Completed Sets", muscle.toString());
+            dataset.addValue(targetSets, "Target Sets", muscle.toString());
+        }
+
+        // Create a new chart with the updated dataset
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Sets per Muscle Group - Week " + week.getWeekNumber(), // Chart Title
+                "Muscle Group", // Category axis (X)
+                "Sets", // Value axis (Y)
+                dataset
+        );
+
+        // Update the chart in the chartPanel
+        chartPanel.setChart(chart);
     }
 
     public int findWeek(File file) {

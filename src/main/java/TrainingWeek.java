@@ -14,6 +14,7 @@ public class TrainingWeek {
     public TrainingWeek(int week) {
         this.week = week;
         setTargetSetsPerWeek();
+        Progress.addWeeks(this);
     }
 
     public List<Exercise> getExercises() {
@@ -36,7 +37,7 @@ public class TrainingWeek {
         this.targetSetsPerWeek.put(MuscleGroup.TRAPS, 0);
     }
 
-    public StringBuilder getSetsPerWeek() {
+    public StringBuilder getSetsPerWeekString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Sets completed in Week " + week + ": " + "\n");
         sb.append("\n");
@@ -52,6 +53,19 @@ public class TrainingWeek {
     public int getAveragePercentage() {
         return totalPercentage / percentageCount;
     }
+
+    public Map<MuscleGroup, Integer> getSetsPerWeekMap() {
+        return setsPerWeek;
+    }
+
+    public Map<MuscleGroup, Integer> getTargetSetsPerWeek() {
+        return targetSetsPerWeek;
+    }
+
+    public int getWeekNumber() {
+        return week;
+    }
+
 
     public void addExercises(List<List<String>> array) {
         int length = array.size();

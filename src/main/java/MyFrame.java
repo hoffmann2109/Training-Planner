@@ -129,6 +129,7 @@ public class MyFrame extends JFrame {
         String analysisResults2 = Analysis.volumeRpe(week).toString();
 
         WeekProgress.addWeek(week);
+        //TODO: Serializing shouldn't happen automatically but through the push of a button
         WeekProgress.serializeWeek(); //Serialize Training weeks
         upperTextArea.setText(analysisResults);  // Update first text area
         lowerTextArea.setText(analysisResults2);
@@ -174,6 +175,12 @@ public class MyFrame extends JFrame {
         for (int i = 0; i < fileName.length(); i++) {
             if (Character.isDigit(fileName.charAt(i))) {
                 week = fileName.charAt(i) - '0';
+            }
+        }
+        // Does training week already exist?
+        for (TrainingWeek tw: Progress.getWeeks()){
+            if (week == tw.getWeekNumber()){
+                week++;
             }
         }
         return week;

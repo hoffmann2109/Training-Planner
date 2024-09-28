@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Analysis {
 
-    // Get sets per week:
+    // Get sets per week per muscle-group:
     public static StringBuilder setsPerWeek(TrainingWeek week){
         return week.getSetsPerWeekString();
     }

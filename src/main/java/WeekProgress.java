@@ -11,4 +11,14 @@ public class WeekProgress {
     public static void serializeWeek(){
         FileHandler.serializeObject(weeks);
     }
+
+    public static void setWeeks(ArrayList<TrainingWeek> newWeeks) {
+        weeks = newWeeks;
+    }
+
+    public static ArrayList<TrainingWeek> getWeeks() {
+        return weeks;
+    }
+
+
 }

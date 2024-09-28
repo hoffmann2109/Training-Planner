@@ -35,4 +35,15 @@ public class FileHandler {
         }
     }
 
+    public static ArrayList<TrainingWeek> deserializeObject() {
+        try (FileInputStream fis = new FileInputStream("training_week.ser");
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
+
+            ArrayList<TrainingWeek> weeks = (ArrayList<TrainingWeek>) ois.readObject();
+            return weeks;
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

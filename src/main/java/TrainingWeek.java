@@ -52,7 +52,7 @@ public class TrainingWeek implements Serializable {
     }
 
     public int getAveragePercentage() {
-        return totalPercentage / percentageCount;
+        return percentageCount == 0 ? 0 : totalPercentage / percentageCount;
     }
 
     public Map<MuscleGroup, Integer> getSetsPerWeekMap() {
@@ -110,5 +110,6 @@ public class TrainingWeek implements Serializable {
             this.setsPerWeek.merge(muscleGroup, setCount, Integer::sum);
 
         }
+
     }
 }

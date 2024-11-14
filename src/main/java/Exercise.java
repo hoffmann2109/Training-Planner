@@ -20,6 +20,8 @@ public class Exercise implements Serializable {
         return sets;
     }
 
+    public String getName() {return name;}
+
     public String toString(){
         return "Exercise: " + name + " for " + muscleGroup + ": " + sets.size() + " sets";
     }

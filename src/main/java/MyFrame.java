@@ -92,6 +92,9 @@ public class MyFrame extends JFrame {
         // ActionListener for Export Button
         exportButton.addActionListener(evt -> {
             WeekProgress.serializeWeek();  // Serialize only on export button click
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            dbHandler.exportTrainingWeek(week);
+            JOptionPane.showMessageDialog(MyFrame.this, "Data exported to PostgreSQL successfully.", "Export", JOptionPane.INFORMATION_MESSAGE);
             JOptionPane.showMessageDialog(MyFrame.this, "Data exported successfully.", "Export", JOptionPane.INFORMATION_MESSAGE);
         });
 

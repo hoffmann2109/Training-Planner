@@ -3,7 +3,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
 public class DatabaseHandler {
     private static final Dotenv dotenv = Dotenv.load(); // Initialize dotenv

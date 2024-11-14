@@ -6,8 +6,8 @@ The **Training Planner** is a Java-based desktop application designed to help us
 
 1. [Features](#features)
 2. [Installation](#installation)
-3. [Usage](#usage)
-4. [Contributing](#contributing)
+3. [Configuration](#configuration)
+4. [Usage](#usage)
 
 ---
 
@@ -17,12 +17,13 @@ The **Training Planner** is a Java-based desktop application designed to help us
 - **Exercise Analysis**:
   - View the number of sets completed per muscle group.
   - See total volume and average RPE per muscle group for each week.
-- **Progress Tracking**: 
+- **Progress Tracking**:
   - Track your progress week-by-week.
   - Update and view completion percentages and sets targets.
 - **Filtered Views**:
   - Select a muscle group to filter the displayed exercises and view relevant data only.
-- **Data Export**: Manually export your weekly training data to ensure your progress is saved.
+- **Data Export**:
+  - Manually export your weekly training data to a PostgreSQL database, ensuring progress is saved for long-term analysis.
 
 ---
 
@@ -59,11 +60,42 @@ The **Training Planner** is a Java-based desktop application designed to help us
 
 ---
 
+## Configuration
+
+### Database Configuration (for PostgreSQL Export)
+
+1. **Set Up PostgreSQL**: Make sure PostgreSQL is running and create a database named `TrainingData`. You can create the necessary table with the following SQL command:
+   ```sql
+   CREATE TABLE training_data (
+       week INT,
+       exercise VARCHAR(50),
+       muscle_group VARCHAR(50),
+       sets INT,
+       reps INT,
+       rpe DOUBLE PRECISION
+   );
+   ```
+
+2. **Secure Database Credentials**: Add your database password in a `.env` file located in the project root (same directory as `pom.xml`):
+   ```plaintext
+   DB_PASSWORD=your_database_password
+   ```
+
+3. **Environment Variable**: Ensure that `.env` is included in `.gitignore` to keep it secure:
+   ```plaintext
+   # Environment variables
+   .env
+   ```
+
+4. **Load Environment Variable**: The application will read the `DB_PASSWORD` from the `.env` file, so make sure you have this file correctly configured before running the application.
+
+---
+
 ## Usage
 
 ### Loading Data
 
-1. Launch the application. 
+1. Launch the application.
 2. Click the **"Upload CSV"** button to select a CSV file containing your exercises. The CSV format should look like this:
    ```
    ExerciseName;MuscleGroup;SetCount;Weight;Reps;RPE
@@ -75,30 +107,9 @@ The **Training Planner** is a Java-based desktop application designed to help us
 
 1. Select a muscle group from the drop-down menu to filter displayed exercises to that muscle group only.
 
-### Exporting Data
+### Exporting Data to PostgreSQL
 
-1. Once ready, click the **"Export"** button to save your weekly training data for future reference.
-
----
-
-## Contributing
-
-We welcome contributions to improve this project! Here's how you can help:
-
-1. **Fork** the repository.
-2. **Create a branch** for your feature or bug fix:
-   ```bash
-   git checkout -b feature-name
-   ```
-3. **Commit** your changes:
-   ```bash
-   git commit -m "Add feature"
-   ```
-4. **Push** the branch:
-   ```bash
-   git push origin feature-name
-   ```
-5. Open a **Pull Request** with a description of your changes.
+1. Click the **"Export"** button to save your weekly training data to the PostgreSQL database. This stores data such as week number, exercises, sets, reps, and RPE.
 
 ---
 
@@ -106,4 +117,4 @@ We welcome contributions to improve this project! Here's how you can help:
 
 - **FlatLaf** for a modern, flat look and feel.
 - **JFreeChart** for the charting functionality.
-
+- **dotenv-java** for secure management of environment variables.

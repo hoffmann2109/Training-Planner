@@ -23,6 +23,7 @@ public class MyFrame extends JFrame {
     private JComboBox<String> comboBox;  // Change to String to include "All" option
     private ChartPanel chartPanel;
     private TrainingWeek week;
+    private JButton clearDatabaseButton; // New button
 
     public MyFrame() {
         this.setTitle("Training Planner");
@@ -144,6 +145,23 @@ public class MyFrame extends JFrame {
             } else {
                 MuscleGroup selectedMuscleGroup = MuscleGroup.valueOf(selected);
                 showFilteredData(selectedMuscleGroup);
+            }
+        });
+
+        clearDatabaseButton = new JButton("Clear Database");
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPanel.add(clearDatabaseButton);
+
+        clearDatabaseButton.addActionListener(evt -> {
+            int confirmation = JOptionPane.showConfirmDialog(this,
+                    "Are you sure you want to clear the database? This action cannot be undone.",
+                    "Confirm Clear Database",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (confirmation == JOptionPane.YES_OPTION) {
+                DatabaseHandler dbHandler = new DatabaseHandler();
+                dbHandler.clearDatabase();
+                JOptionPane.showMessageDialog(this, "Database cleared successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }

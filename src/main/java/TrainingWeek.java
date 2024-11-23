@@ -81,10 +81,12 @@ public class TrainingWeek implements Serializable {
 
             String muscleGroupString = array.get(i).get(1).trim().toUpperCase();
             muscleGroupString = muscleGroupString.replace(' ', '_');
-            MuscleGroup muscleGroup = MuscleGroup.valueOf(muscleGroupString);
+            MuscleGroup muscleGroup;
+            try {
+                muscleGroup = MuscleGroup.valueOf(muscleGroupString);
+                // Process as usual
             int setCount = Integer.parseInt(array.get(i).get(2).trim());
             if (setCount > 0) {
-
 
                 double weight = Double.parseDouble(array.get(i).get(3).trim());
                 List<Set> sets = new ArrayList<>();
@@ -108,7 +110,11 @@ public class TrainingWeek implements Serializable {
             }
             // Accumulate set counts per muscle group
             this.setsPerWeek.merge(muscleGroup, setCount, Integer::sum);
-
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid muscle group: " + muscleGroupString);
+                continue;
+                // Skip this row
+            }
         }
 
     }

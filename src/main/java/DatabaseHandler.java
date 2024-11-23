@@ -14,6 +14,18 @@ public class DatabaseHandler {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
+    public void clearDatabase() {
+        String sql = "DELETE FROM training_data";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            int affectedRows = pstmt.executeUpdate();
+            System.out.println("Cleared database. Rows deleted: " + affectedRows);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void exportTrainingWeek(TrainingWeek week) {
         String sql = "INSERT INTO training_data (week, exercise, muscle_group, sets, reps, rpe) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = connect();

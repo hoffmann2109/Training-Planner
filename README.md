@@ -47,15 +47,11 @@ The **Training Planner** is a Java-based desktop application designed to help us
    ```bash
    mvn install
    ```
+3. Configure the Database (see Configuration below)
 
-3. Compile and run the application:
+4. Compile and run the application:
    ```bash
    mvn exec:java -Dexec.mainClass="MyFrame"
-   ```
-
-4. To package the application:
-   ```bash
-   mvn package
    ```
 
 ---

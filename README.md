@@ -31,7 +31,7 @@ The **Training Planner** is a Java-based desktop application designed to help us
 
 ### Prerequisites
 
-- Java Development Kit (JDK) 8 or later
+- Java Development Kit (JDK) 17 or later
 - [Maven](https://maven.apache.org/) (for managing dependencies)
 - [JFreeChart Library](https://sourceforge.net/projects/jfreechart/) (for charting) – You can add it to your project by including the appropriate Maven dependency or adding the JAR to your project.
 
